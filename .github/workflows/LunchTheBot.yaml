@@ -1,0 +1,35 @@
+name: Run Discord Bot
+
+on:
+  schedule:
+    - cron: "0 */5 * * *" # Runs every 5 hours
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install # Adjust for your package manager
+
+      - name: Start Bot with PM2
+        run: |
+          npm install -g pm2
+          pm2 start src/index.js --name "5hypixel-network"
+          pm2 save
+          pm2 list  # Show running processes
+
+      - name: Wait Until Timeout
+        run: sleep 17500 # 4 hours 51 minutes (before 6-hour limit)
+
+      - name: Re-trigger Workflow
+        run: |
+          gh workflow run LunchTheBot.yaml  # Adjust workflow filename
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
