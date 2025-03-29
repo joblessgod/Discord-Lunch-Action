@@ -18,12 +18,12 @@ jobs:
       - name: Install dependencies
         run: npm install # Install node modules
 
-      - name: Start the bot
-        run: npm run start # Replace with your bot's main file
-
       - name: Create .env file
         run: |
           echo "DISCORD_TOKEN=${{ secrets.TOKEN }}" >> .env
+
+      - name: Start the bot
+        run: npm run start # Replace with your bot's main file
 
       - name: Re-trigger Workflow Before Timeout
         run: |
