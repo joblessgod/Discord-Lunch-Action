@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:
 
 jobs:
   run-bot:
@@ -16,20 +16,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: npm install # Adjust for your package manager
+        run: npm install # Install node modules
 
-      - name: Start Bot with PM2
+      - name: Start the bot
+        run: npm run start # Replace with your bot's main file
+
+      - name: Create .env file
         run: |
-          npm install -g pm2
-          pm2 start src/index.js --name "5hypixel-network"
-          pm2 save
-          pm2 list  # Show running processes
+          echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
 
-      - name: Wait Until Timeout
-        run: sleep 17500 # 4 hours 51 minutes (before 6-hour limit)
-
-      - name: Re-trigger Workflow
+      - name: Re-trigger Workflow Before Timeout
         run: |
-          gh workflow run LunchTheBot.yaml  # Adjust workflow filename
+          gh workflow run LunchTheBot.yaml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
