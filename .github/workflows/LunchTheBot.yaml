@@ -2,7 +2,7 @@ name: Run Discord Bot
 
 on:
   schedule:
-    - cron: "0 */5 * * *" # Runs every 5 hours
+    - cron: "*/10 * * * *" # Runs every 10 minutes
   push:
     branches:
       - main
