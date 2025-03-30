@@ -35,14 +35,22 @@ jobs:
         if: success()
         run: npm install # Install node modules
 
+      - name: Install PM2 globally
+        if: success()
+        run: npm install -g pm2
+
       - name: Create .env file
         if: success()
         run: |
           echo "DISCORD_TOKEN=${{ secrets.TOKEN }}" >> .env
 
-      - name: Start the bot
+      - name: Start the bot with PM2
         if: success()
-        run: npm run start # Replace with your bot's main file
+        run: pm2 start npm --name "5hypixel-network" -- run start # Replace with your bot's main file
+
+      - name: Save PM2 process list
+        if: success()
+        run: pm2 save
 
       - name: Re-trigger Workflow Before Timeout
         if: success()
