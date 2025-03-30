@@ -12,20 +12,40 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
     steps:
+      - name: Check for running workflows
+        uses: actions/github-script@v6
+        id: check-running
+        with:
+          script: |
+            const { data: runs } = await github.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'LunchTheBot.yaml',
+              status: 'in_progress',
+            });
+            if (runs.total_count > 0) {
+              core.setFailed('A previous workflow run is still in progress.');
+            }
+
       - name: Checkout code
+        if: success()
         uses: actions/checkout@v4
 
       - name: Install dependencies
+        if: success()
         run: npm install # Install node modules
 
       - name: Create .env file
+        if: success()
         run: |
           echo "DISCORD_TOKEN=${{ secrets.TOKEN }}" >> .env
 
       - name: Start the bot
+        if: success()
         run: npm run start # Replace with your bot's main file
 
       - name: Re-trigger Workflow Before Timeout
+        if: success()
         run: |
           gh workflow run LunchTheBot.yaml
         env:
