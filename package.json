@@ -2,9 +2,10 @@
     "name": "5hypixel-network",
     "version": "1.0.0",
     "main": "src/index.js",
+    "type": "module",
     "scripts": {
         "dev": "node --watch --no-warnings .",
-        "start": "node ."
+        "start": "cls && node ."
     },
     "dependencies": {
         "discord.js": "^14.14.1",
