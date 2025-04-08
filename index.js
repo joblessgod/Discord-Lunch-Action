@@ -47,7 +47,7 @@ client.on("ready", async () => {
         name: "variant",
         type: 3,
         description: "Choose the airhorn variant",
-        required: true,
+        required: false,
         autocomplete: true,
       },
     ],
