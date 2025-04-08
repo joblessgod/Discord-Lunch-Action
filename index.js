@@ -1,4 +1,8 @@
-import { Client, GatewayIntentBits } from "discord.js";
+import {
+  ApplicationCommandOptionType,
+  Client,
+  GatewayIntentBits,
+} from "discord.js";
 import "dotenv/config";
 
 const client = new Client({
@@ -11,16 +15,18 @@ const client = new Client({
 });
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
-
-  if (interaction.commandName === "airhorn") {
-    const variant = interaction.options.getString("variant");
-    if (variant) {
-      // Handle your command with the provided variant
-      return interaction.reply(`Playing airhorn with variant: ${variant}`);
+  // Handle slash commands
+  if (interaction.isCommand()) {
+    if (interaction.commandName === "airhorn") {
+      const variant = interaction.options.getString("variant");
+      if (variant) {
+        // Handle your command with the provided variant
+        return interaction.reply(`Playing airhorn with variant: ${variant}`);
+      }
     }
   }
 
+  // Handle autocomplete
   if (interaction.isAutocomplete()) {
     if (interaction.commandName === "airhorn") {
       const focusedOption = interaction.options.getFocused(true);
@@ -38,16 +44,16 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("ready", async () => {
-  console.log(`${client.user.username} is online`);
+  console.log(`${client.user.tag} is online`);
   await client.application.commands.create({
     name: "airhorn",
     description: "Play an airhorn sound",
     options: [
       {
         name: "variant",
-        type: 3,
+        type: ApplicationCommandOptionType.String,
         description: "Choose the airhorn variant",
-        required: false,
+        required: true,
         autocomplete: true,
       },
     ],
