@@ -2,7 +2,7 @@
     "name": "sancity",
     "version": "1.0.0",
     "main": "index.js",
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
         "dev": "node --watch --no-warnings .",
         "start": "cls && node ."
